@@ -5,54 +5,89 @@ int data[SIZE];
 int left = -1;
 int right = -1;
 
-int insertLeft(int d) {
-	if (size() == SIZE-1)
-		return;
-	if (left==-1) {
-		left=right=0;
-		data[left]= d;
-		return;
+int insertLeft(int d)
+{
+	if (size() == SIZE - 1)
+		return 0;
+	if (left == -1)
+	{
+		left = right = 0;
+		data[left] = d;
+		return 0;
 	}
-	left = (left-1+SIZE)%SIZE;
+	left = (left - 1 + SIZE) % SIZE;
 	data[left] = d;
+	return 0;
 }
 
-void insertRight(int d) {
-	// Not implemented
+void insertRight(int d)
+{
+	if (size() == SIZE)
+		exit(0);
+	if (left == -1)
+	{
+		left = right = 0;
+		data[left] = d;
+	}
+	else
+	{
+		right = (right + 1) % SIZE;
+		data[right] = d;
+	}
 }
 
-int removeLeft() {
-	return 0; // Not implemented
-}
-
-int removeRight() {
+int removeLeft()
+{
 	int d, s;
-	
 	s = size();
-	
-	if (s==0)
+	if (s == 0)
+		return ERR_DATA;
+	d = data[left];
+	if (s == 1)
+	{
+		init();
+		return d;
+	}
+	else
+	{
+		left = (left + 1) % SIZE;
+		return d;
+	}
+}
+
+int removeRight()
+{
+	int d, s;
+
+	s = size();
+
+	if (s == 0)
 		return ERR_DATA; // Error value
 	d = data[right];
-	right = (right - 1 + SIZE)%SIZE;
-	if (s == 1) 
+	right = (right - 1 + SIZE) % SIZE;
+	if (s == 1)
 		init();
-	return d;	
+	return d;
 }
 
-int hasWelcome() {
+int hasWelcome()
+{
 	return size() < SIZE;
 }
 
-int isEmpty() {
+int isEmpty()
+{
 	return size() == 0;
 }
 
-void init() {
+void init()
+{
 	left = right = -1;
 }
 
-int size() {
+int size()
+{
 	if (left == -1)
 		return 0;
-	return (right+SIZE-left)%SIZE+1;
+	return (right + SIZE - left) % SIZE + 1;
 }
