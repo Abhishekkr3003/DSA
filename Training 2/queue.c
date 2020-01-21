@@ -13,7 +13,6 @@ void joinQ(int item)
         printf("Queue is full.\nNo further addition possible!!!\n");
         return;
     }
-
     if (isEmpty())
     {
         front = rear = 0;
@@ -43,7 +42,7 @@ int leaveQ()
     else
     {
         d = queue[front];
-        front = (front - 1 + size) % size;
+        front = (front + 1) % size;
     }
     return d;
 }
@@ -57,7 +56,7 @@ int isEmpty()
 }
 int isFull()
 {
-    if ((front == 1 && rear == size - 1) || (front = rear + 1))
+    if ((front == 1 && rear == size - 1) || (front == rear + 1))
         return 1;
     else
         return 0;
