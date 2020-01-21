@@ -1,5 +1,6 @@
 /* An implementation of Deque  */
 #include "deque.h"
+#include<stdlib.h>
 
 int data[SIZE];
 int left = -1;

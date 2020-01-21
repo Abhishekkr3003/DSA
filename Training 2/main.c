@@ -4,13 +4,14 @@
 
 int main(void)
 {
-	int i;
+	int i,s;
 	init(); // Start deque
-
+	
 	for (i = 0; i < 10; i++)
 	{
 		insertLeft(i * i);
-		printf("Size = %d Data = %d\n", size(), removeRight());
+		s=size();
+		printf("Size = %d Data = %d\n", s, removeRight());
 		insertLeft(i * i * i);
 	}
 
