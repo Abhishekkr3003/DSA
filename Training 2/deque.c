@@ -1,6 +1,7 @@
 /* An implementation of Deque  */
 #include "deque.h"
 #include<stdlib.h>
+#include<stdio.h>
 
 int data[SIZE];
 int left = -1;
@@ -8,8 +9,10 @@ int right = -1;
 
 int insertLeft(int d)
 {
-	if (size() == SIZE - 1)
+	if (size() == SIZE)
+	{	printf("Element cannot be inserted as Deque is FULL!!!\n");
 		return 0;
+	}
 	if (left == -1)
 	{
 		left = right = 0;
@@ -24,7 +27,10 @@ int insertLeft(int d)
 void insertRight(int d)
 {
 	if (size() == SIZE)
-		exit(0);
+	{	
+		printf("Element cannot be inserted as Deque is FULL!!!\n");
+		return;
+	}
 	if (left == -1)
 	{
 		left = right = 0;
@@ -42,7 +48,10 @@ int removeLeft()
 	int d, s;
 	s = size();
 	if (s == 0)
+	{
+		printf("Nothing to delete from the deque.\n");
 		return ERR_DATA;
+	}
 	d = data[left];
 	if (s == 1)
 	{
@@ -63,7 +72,10 @@ int removeRight()
 	s = size();
 
 	if (s == 0)
+	{
+		printf("Nothing to delete from the deque.\n");
 		return ERR_DATA; // Error value
+	}
 	d = data[right];
 	right = (right - 1 + SIZE) % SIZE;
 	if (s == 1)
