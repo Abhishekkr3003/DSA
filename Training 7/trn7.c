@@ -17,8 +17,8 @@ struct Huff
 char letters[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 int freq[] = {21912, 16587, 14810, 14003, 13318, 12666, 11450, 10977, 10795, 7874, 7253, 5246, 4943, 4761, 4200, 3853, 3819, 3693, 3316, 2715, 2019, 1257, 315, 205, 188, 128};
 
-//int freq[] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-//int freq[] = {3,0,0,0,0,0,1,0,2,0,2,3,0,2,0,1,0,1,0,0,1,1,0,0,0,0};
+//int freq[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+//int freq[] = {3, 0, 0, 0, 0, 0, 1, 0, 2, 0, 2, 3, 0, 2, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0};
 
 struct Huff alphabet[26]; // External nodes of Huffman tree.
 struct Huff *heap[30];
@@ -102,21 +102,24 @@ void swapAtIdx(int x, int y)
 	heap[x] = heap[y];
 	heap[y] = tmp;
 }
-
 void heapifyUp(int index)
 {
 	/* Removed about 10 lines of code */
-	int par;
-	struct Huff *k;
-	k = heap[index];
-	par = index / 2;
-	while (par >= 1 && heap[par]->freq > heap[index]->freq)
+	int i;
+	for (i = 2; i <= index; i++)
 	{
-		heap[index] = heap[par];
-		index = par;
-		par = index / 2;
+		int s = i, f = s / 2;
+		struct Huff *t = heap[i];
+		while (f != 0 && heap[s]->freq <= heap[f]->freq)
+		//while(s>1 && t->freq < heap[f]->freq)
+		{
+			swapAtIdx(s, f);
+			//heap[s]=heap[f];
+			s = f;
+			f = s / 2;
+		}
+		//heap[s]=t;
 	}
-	heap[index] = k;
 }
 
 void heapifyDown(int parent)
@@ -125,36 +128,29 @@ void heapifyDown(int parent)
 	int left_child, right_child;
 	left_child = 2 * parent;
 	right_child = left_child + 1;
-	struct Huff *k;
-	k = heap[parent];
-	while (right_child <= heapSz)
+
+	if (left_child <= heapSz && heap[parent]->freq >= heap[left_child]->freq)
 	{
-		if (heap[parent]->freq <= heap[left_child]->freq && heap[parent]->freq <= heap[right_child]->freq)
+
+		if ((right_child <= heapSz && heap[left_child]->freq < heap[right_child]->freq) || (right_child > heapSz))
 		{
-			heap[parent] = k;
-			return;
-		}
-		else if (heap[left_child]->freq < heap[right_child]->freq)
-		{
-			heap[parent] = heap[left_child];
+			swapAtIdx(parent, left_child);
 			parent = left_child;
 		}
-		else
+		else if (heap[left_child]->freq >= heap[right_child]->freq && heap[parent]->freq >= heap[right_child]->freq)
 		{
-			heap[parent] = heap[right_child];
+			swapAtIdx(parent, right_child);
 			parent = right_child;
 		}
-
-		left_child = 2 * parent;
-		right_child = left_child + 1;
 	}
-	if (left_child == heapSz && heap[left_child]->freq > heap[parent]->freq)
+	else if (right_child <= heapSz && heap[right_child]->freq <= heap[parent]->freq)
 	{
-		heap[parent] = heap[left_child];
-		parent = left_child;
+		swapAtIdx(parent, right_child);
+		parent = right_child;
 	}
-	heap[parent] = k;
-	return;
+	else
+		return;
+	heapifyDown(parent);
 }
 
 int heapIsRootOnly(void)
@@ -183,6 +179,17 @@ void initial_alphabet()
 		printf("Alphabet: %c || Frequency: %d.\n", temp->left->alpha, temp->left->freq);
 	}
 }
+// void print_alpha()
+// {
+//  printf("\n");
+// 	char cho[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+// 	for (int i = 0; i < 26; i++)
+// 	{
+// 		printf("%c: ", cho[i]);
+// 		emitLetterCode(cho[i]);
+// 		printf("\n");
+// 	}
+// }
 
 int main(void)
 {
@@ -215,5 +222,5 @@ int main(void)
 		else
 			emitLetterCode(town[i]);
 	}
-	printf("\n");
+	//print_alpha();
 }
